@@ -204,7 +204,7 @@ class G2p(object):
         for p in prons[:-1]:
             if p == ",":
                 pass
-            elif p == " ":
+            if p == " ":
                 tokens.append("{" + f"{' '.join([str(x) for x in current])}" + "}")
                 current = []
             else:
