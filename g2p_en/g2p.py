@@ -1,15 +1,20 @@
 # -*- coding: utf-8 -*-
 # /usr/bin/python
+# Example extending the heteronym dict:
+# g2p.homograph2features["wind"] = ("W AY1 N D".split(), "W IH1 N D".split(), "V")
+
 '''
 By kyubyong park(kbpark.linguist@gmail.com) and Jongseok Kim(https://github.com/ozmig77)
 https://www.github.com/kyubyong/g2p
 '''
+
 from nltk import pos_tag
 from nltk.corpus import cmudict
 import nltk
 from nltk.tokenize import TweetTokenizer
 word_tokenize = TweetTokenizer().tokenize
 import numpy as np
+import time
 import codecs
 import re
 import os
@@ -144,6 +149,20 @@ class G2p(object):
 
         preds = [self.idx2p.get(idx, "<unk>") for idx in preds]
         return preds
+    
+    # def ARPA(text):
+    #     out = g2p(text)
+    #     current = []
+    #     tokens = []
+    #     for p in out:
+    #         if p == ",":
+    #             pass
+    #         if p == " ":
+    #             tokens.append("{" + f"{' '.join([str(x) for x in current])}" + "}")
+    #             current = []
+    #         else:
+    #             current.append(p)
+    #     return ' '.join([str(x) for x in tokens]) + ";"
 
     def __call__(self, text):
         # preprocessing
@@ -180,8 +199,18 @@ class G2p(object):
             prons.extend(pron)
             prons.extend([" "])
 
-        return prons[:-1]
-
+        current = []
+        tokens = []
+        for p in prons[:-1]:
+            if p == ",":
+                pass
+            if p == " ":
+                tokens.append("{" + f"{' '.join([str(x) for x in current])}" + "}")
+                current = []
+            else:
+                current.append(p)
+        return ' '.join([str(x) for x in tokens]) + ";"
+        
 if __name__ == '__main__':
     texts = ["I have $250 in my pocket.", # number -> spell-out
              "popular pets, e.g. cats and dogs", # e.g. -> for example
