@@ -209,7 +209,7 @@ class G2p(object):
                 current = []
             else:
                 current.append(p)
-        return ' '.join([str(x) for x in tokens]) + ";"
+        return ' '.join([str(x) for x in tokens]).replace(" {,}",",").replace(" {.}","").replace(" {!}","!").replace(" {?}","?") + ";"
         
 if __name__ == '__main__':
     texts = ["I have $250 in my pocket.", # number -> spell-out
