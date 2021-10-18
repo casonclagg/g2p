@@ -198,14 +198,12 @@ class G2p(object):
 
             prons.extend(pron)
             prons.extend([" "])
-        print(prons)
         current = []
         tokens = []
         for p in prons[:]:
             if p == ",":
                 pass
             if p == " ":
-                print(current)
                 tokens.append("{" + f"{' '.join([str(x) for x in current])}" + "}")
                 current = []
             else:

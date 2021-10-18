@@ -16,7 +16,7 @@ _comma_number_re = re.compile(r'([0-9][0-9\,]+[0-9])')
 _pounds_re = re.compile(r'£([0-9\,]*[0-9]+)')
 _dollars_re = re.compile(r'\$([0-9\.\,]*[0-9]+)')
 _ordinal_re = re.compile(r'[0-9]+(st|nd|rd|th)')
-_number_re = re.compile(r'[0-9.]+')
+_number_re = re.compile(r'[0-9]+[.]*[0-9]*')
 
 def _remove_commas(m):
     return m.group(1).replace(',', '')
