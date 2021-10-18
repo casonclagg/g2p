@@ -10,24 +10,19 @@ from __future__ import print_function
 import inflect
 import re
 
-
-
 _inflect = inflect.engine()
 _comma_number_re = re.compile(r'([0-9][0-9\,]+[0-9])')
-_decimal_number_re = re.compile(r'([0-9]+\.[0-9]+)')
+# _decimal_number_re = re.compile(r'([0-9]+\.[0-9]+)')
 _pounds_re = re.compile(r'£([0-9\,]*[0-9]+)')
 _dollars_re = re.compile(r'\$([0-9\.\,]*[0-9]+)')
 _ordinal_re = re.compile(r'[0-9]+(st|nd|rd|th)')
-_number_re = re.compile(r'[0-9]+')
-
+_number_re = re.compile(r'[0-9.]+')
 
 def _remove_commas(m):
     return m.group(1).replace(',', '')
 
-
-def _expand_decimal_point(m):
-    return m.group(1).replace('.', ' point ')
-
+# def _expand_decimal_point(m):
+#     return m.group(1).replace('.', ' point ')
 
 def _expand_dollars(m):
     match = m.group(1)
@@ -49,31 +44,28 @@ def _expand_dollars(m):
     else:
         return 'zero dollars'
 
-
 def _expand_ordinal(m):
     return _inflect.number_to_words(m.group(0))
 
-
 def _expand_number(m):
-    num = int(m.group(0))
-    if num > 1000 and num < 3000:
-        if num == 2000:
-            return 'two thousand'
-        elif num > 2000 and num < 2010:
-            return 'two thousand ' + _inflect.number_to_words(num % 100)
-        elif num % 100 == 0:
-            return _inflect.number_to_words(num // 100) + ' hundred'
-        else:
-            return _inflect.number_to_words(num, andword='', zero='oh', group=2).replace(', ', ' ')
-    else:
-        return _inflect.number_to_words(num, andword='')
-
+    num = m.group(0)
+    # if num > 1000 and num < 3000:
+    #     if num == 2000:
+    #         return 'two thousand'
+    #     elif num > 2000 and num < 2010:
+    #         return 'two thousand ' + _inflect.number_to_words(num % 100)
+    #     elif num % 100 == 0:
+    #         return _inflect.number_to_words(num // 100) + ' hundred'
+    #     else:
+    #         return _inflect.number_to_words(num, andword='', zero='oh', group=2).replace(', ', ' ')
+    # else:
+    return _inflect.number_to_words(num, andword='').replace('-', ' ').replace(',', ' ')
 
 def normalize_numbers(text):
     text = re.sub(_comma_number_re, _remove_commas, text)
     text = re.sub(_pounds_re, r'\1 pounds', text)
     text = re.sub(_dollars_re, _expand_dollars, text)
-    text = re.sub(_decimal_number_re, _expand_decimal_point, text)
+    # text = re.sub(_decimal_number_re, _expand_decimal_point, text)
     text = re.sub(_ordinal_re, _expand_ordinal, text)
     text = re.sub(_number_re, _expand_number, text)
     return text

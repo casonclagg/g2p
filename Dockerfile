@@ -11,4 +11,5 @@ COPY . .
 CMD ["/bin/bash"]
 
 # docker build -t ccc/g2p .
-# docker run -it ccc/g2p -v ${pwd}:content /bin/bash
+# docker run -it -v $(pwd):/content ccc/g2p /bin/bash
+# docker run -it -v $(pwd):/content ccc/g2p python test.py
